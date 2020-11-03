@@ -1,22 +1,20 @@
 package agh.cs.lab3;
 
-import agh.cs.lab2.MapDirection;
 import agh.cs.lab2.MoveDirection;
+import agh.cs.lab2.Vector2d;
+import agh.cs.lab4.IWorldMap;
+import agh.cs.lab4.RectangularMap;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class World {
     public static void main(String[] args) {
-        Animal newAnimal = new Animal();
-        List<MoveDirection> directionList = OptionsParser.parse(args);
+        List<MoveDirection> directions = OptionsParser.parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        map.place(new Animal(map));
+        map.place(new Animal(map,new Vector2d(3,4)));
+        map.run(directions);
 
-        System.out.println(newAnimal);
-
-        for(MoveDirection direction : directionList) {
-            System.out.println("Moving in the " + direction.toString() + " direction");
-            newAnimal.move(direction);
-            System.out.println(newAnimal);
-        }
+        System.out.println(map);
     }
 }

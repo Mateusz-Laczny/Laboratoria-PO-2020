@@ -1,14 +1,23 @@
 package agh.cs.lab3;
 
 import agh.cs.lab2.*;
+import agh.cs.lab4.IWorldMap;
 
 public class Animal {
     private MapDirection orientation;
     private Vector2d position;
+    private final IWorldMap map;
 
-    public Animal() {
+    public Animal(IWorldMap map, Vector2d initialPosition) {
+        orientation = MapDirection.NORTH;
+        position = initialPosition;
+        this.map = map;
+    }
+
+    public Animal(IWorldMap map) {
         orientation = MapDirection.NORTH;
         position = new Vector2d(2, 2);
+        this.map = map;
     }
 
     public MapDirection getOrientation() {
@@ -19,10 +28,21 @@ public class Animal {
         return position;
     }
 
+//    @Override
+//    public String toString() {
+//        return "orientation=" + orientation +
+//                ", position=" + position;
+//    }
+
+
     @Override
     public String toString() {
-        return "orientation=" + orientation +
-                ", position=" + position;
+        return switch (orientation) {
+            case NORTH -> "^";
+            case WEST -> "<";
+            case SOUTH -> "v";
+            case EAST -> ">";
+        };
     }
 
     public void move(MoveDirection direction) {
@@ -36,7 +56,7 @@ public class Animal {
 
     private void changePosition(Vector2d changeVector) {
         Vector2d newPosition = position.add(changeVector);
-        if(newPosition.precedes(Vector2d.zero()) && newPosition.follows(new Vector2d(4, 4))) {
+        if(map.canMoveTo(newPosition)) {
             position = newPosition;
         }
     }

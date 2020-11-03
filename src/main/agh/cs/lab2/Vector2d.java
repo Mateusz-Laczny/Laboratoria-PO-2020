@@ -3,68 +3,69 @@ package agh.cs.lab2;
 import java.util.Objects;
 
 public class Vector2d {
-    private int x_cr;
-    private int y_cr;
+    public final int x_coordinate;
+    public final int y_coordinate;
 
-    public Vector2d(int x_cr, int y_cr) {
-        this.x_cr = x_cr;
-        this.y_cr = y_cr;
+    public Vector2d(int x_coordinate, int y_coordinate) {
+        this.x_coordinate = x_coordinate;
+        this.y_coordinate = y_coordinate;
     }
 
     public boolean precedes(Vector2d other) {
-        return other.x_cr <= x_cr && other.y_cr <= y_cr;
+        return other.x_coordinate <= x_coordinate && other.y_coordinate <= y_coordinate;
     }
 
     public boolean follows(Vector2d other) {
-        return other.x_cr >= x_cr && other.y_cr >= y_cr;
+        return other.x_coordinate >= x_coordinate && other.y_coordinate >= y_coordinate;
     }
 
     public Vector2d upperRight(Vector2d other) {
-        int max_x_cr = x_cr;
-        int max_y_cr = y_cr;
+        int max_x_cr = x_coordinate;
+        int max_y_cr = y_coordinate;
 
-        if(max_x_cr < other.x_cr) {
-            max_x_cr = other.x_cr;
+        if(max_x_cr < other.x_coordinate) {
+            max_x_cr = other.x_coordinate;
         }
 
-        if(max_y_cr < other.y_cr) {
-            max_y_cr = other.y_cr;
+        if(max_y_cr < other.y_coordinate) {
+            max_y_cr = other.y_coordinate;
         }
 
         return new Vector2d(max_x_cr, max_y_cr);
     }
 
     public Vector2d lowerLeft(Vector2d other) {
-        int min_x_cr = x_cr;
-        int min_y_cr = y_cr;
+        int min_x_cr = x_coordinate;
+        int min_y_cr = y_coordinate;
 
-        if(min_x_cr > other.x_cr) {
-            min_x_cr = other.x_cr;
+        if(min_x_cr > other.x_coordinate) {
+            min_x_cr = other.x_coordinate;
         }
 
-        if(min_y_cr > other.y_cr) {
-            min_y_cr = other.y_cr;
+        if(min_y_cr > other.y_coordinate) {
+            min_y_cr = other.y_coordinate;
         }
 
         return new Vector2d(min_x_cr, min_y_cr);
     }
 
     public Vector2d add(Vector2d other) {
-        return new Vector2d(x_cr + other.x_cr, y_cr + other.y_cr);
+        return new Vector2d(x_coordinate + other.x_coordinate, y_coordinate + other.y_coordinate);
     }
 
     public Vector2d subtract(Vector2d other) {
-        return new Vector2d(x_cr - other.x_cr, y_cr - other.y_cr);
+        return new Vector2d(x_coordinate - other.x_coordinate, y_coordinate - other.y_coordinate);
     }
 
     public Vector2d opposite() {
-        return new Vector2d(-x_cr, -y_cr);
+        return new Vector2d(-x_coordinate, -y_coordinate);
     }
 
+    /**
+     *   Returns the zero vector (0,0)
+     * @return Vector2D object with coordinates (0, 0)
+    **/
     public static Vector2d zero() {
-        /*
-        Returns the zero vector (0,0)
-         */
         return new Vector2d(0, 0);
     }
 
@@ -73,17 +74,17 @@ public class Vector2d {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vector2d vector2D = (Vector2d) o;
-        return x_cr == vector2D.x_cr &&
-                y_cr == vector2D.y_cr;
+        return x_coordinate == vector2D.x_coordinate &&
+                y_coordinate == vector2D.y_coordinate;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x_cr, y_cr);
+        return Objects.hash(x_coordinate, y_coordinate);
     }
 
     @Override
     public String toString() {
-        return "(" + x_cr + ", " + y_cr + ")";
+        return "(" + x_coordinate + ", " + y_coordinate + ")";
     }
 }
