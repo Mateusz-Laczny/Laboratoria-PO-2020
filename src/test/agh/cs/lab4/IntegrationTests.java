@@ -8,6 +8,7 @@ import agh.cs.lab3.OptionsParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -239,5 +240,12 @@ class IntegrationTests {
         assertEquals("v", animal2.toString());
         assertEquals("<", animal3.toString());
         assertEquals("^", animal4.toString());
+
+        // ObjectAt method tests
+        assertEquals(Optional.of(animal1), map.objectAt(new Vector2d(2, 5)));
+        assertEquals(Optional.of(animal2), map.objectAt(new Vector2d(1, 3)));
+        assertEquals(Optional.of(animal3), map.objectAt(new Vector2d(2, 3)));
+        assertEquals(Optional.empty(), map.objectAt(new Vector2d(1, 1)));
+        assertEquals(Optional.empty(), map.objectAt(new Vector2d(4, 4)));
     }
 }
