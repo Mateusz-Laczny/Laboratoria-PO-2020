@@ -31,19 +31,8 @@ public class RectangularMap implements IWorldMap{
     @Override
     public boolean canMoveTo(Vector2d position) {
         // Given position is not in the given rectangle
-        if(lowerLeftCorner.follows(position) && upperRightCorner.precedes(position)) {
-            for(Animal animal : animalList) {
-                // Given position is taken
-                if (animal.getPosition().equals(position)) {
-                    return false;
-                }
-            }
-            // Given position is free and in the rectangle
-            return true;
-        } else {
-            // Given position is outside the map
-            return false;
-        }
+        return lowerLeftCorner.follows(position) && upperRightCorner.precedes(position) &&
+        !isOccupied(position);
     }
 
     @Override

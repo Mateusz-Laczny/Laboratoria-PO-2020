@@ -1,6 +1,8 @@
 package agh.cs.lab3;
 
-import agh.cs.lab2.*;
+import agh.cs.lab2.MoveDirection;
+import agh.cs.lab2.MapDirection;
+import agh.cs.lab2.Vector2d;
 import agh.cs.lab4.IWorldMap;
 
 public class Animal {
@@ -27,13 +29,6 @@ public class Animal {
     public Vector2d getPosition() {
         return position;
     }
-
-//    @Override
-//    public String toString() {
-//        return "orientation=" + orientation +
-//                ", position=" + position;
-//    }
-
 
     @Override
     public String toString() {
