@@ -27,8 +27,10 @@ public class GrassField implements IWorldMap {
      *          Number of grass swaths to generate
      */
     private void generateGrass(int numOfGrassSwaths) {
+        int maxPos = (int) Math.sqrt(numOfGrassSwaths * 10);
+
         for(int i = 0; i < numOfGrassSwaths; i++) {
-            grassSwathsList.add(new Grass(generateRandomPosition(numOfGrassSwaths)));
+            grassSwathsList.add(new Grass(generateRandomPosition(numOfGrassSwaths, maxPos)));
         }
     }
 
@@ -36,14 +38,24 @@ public class GrassField implements IWorldMap {
      * Generates valid random grass swath position for the grass generation
      * @param numOfGrassSwaths
      *          Number based on which the position is generated
+     * @param maxPosition
+     *          Max boundary on the coordinate value. The minimum is 0
      * @return Vector2d object representing a position on a 2D map
      */
-    private Vector2d generateRandomPosition(int numOfGrassSwaths) {
-        int maxPos = (int) Math.sqrt(numOfGrassSwaths * 10);
-        int randomPosX = ThreadLocalRandom.current().nextInt(0, maxPos + 1);
-        int randomPosY = ThreadLocalRandom.current().nextInt(0, maxPos + 1);
+    private Vector2d generateRandomPosition(int numOfGrassSwaths, int maxPosition) {
+        int randomPosX = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
+        int randomPosY = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
 
-        return new Vector2d(randomPosX, randomPosY);
+        Vector2d generatedPos = new Vector2d(randomPosX, randomPosY);
+
+        while (isOccupiedByGrass(generatedPos)) {
+            randomPosX = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
+            randomPosY = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
+
+            generatedPos = new Vector2d(randomPosX, randomPosY);
+        }
+
+        return generatedPos;
     }
 
     @Override
