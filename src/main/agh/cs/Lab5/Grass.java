@@ -1,4 +1,4 @@
-package Lab5;
+package agh.cs.Lab5;
 
 import agh.cs.lab2.Vector2d;
 

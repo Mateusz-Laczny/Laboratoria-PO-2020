@@ -1,4 +1,4 @@
-package Lab5;
+package agh.cs.Lab5;
 
 import agh.cs.lab2.MoveDirection;
 import agh.cs.lab2.Vector2d;
@@ -19,6 +19,11 @@ public class GrassField implements IWorldMap {
 
     public GrassField(int numOfGrassSwaths) {
         generateGrass(numOfGrassSwaths);
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 
     /**
