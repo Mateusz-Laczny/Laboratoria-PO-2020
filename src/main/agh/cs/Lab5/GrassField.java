@@ -6,10 +6,13 @@ import agh.cs.lab3.Animal;
 import agh.cs.lab4.IWorldMap;
 import agh.cs.lab4.MapVisualiser;
 
+import java.lang.reflect.Array;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.LinkedList;
 import java.util.List;
+import java.lang.Math;
+
 
 public class GrassField implements IWorldMap {
     private final List<Grass> grassSwathsList= new LinkedList<>();
@@ -23,11 +26,38 @@ public class GrassField implements IWorldMap {
 
     @Override
     public String toString() {
-        return "";
+        return visualizer.draw(calculateCornersForVisualization()[0], calculateCornersForVisualization()[1]);
     }
 
     /**
-     * Fills up the map randomly within the (0,0), (sqrt(n*10), sqrt(n*10),  given number of swaths n
+     * Calculates map corners for visualization. Animals have higher priority than grass swaths
+     *
+     * @return An array consisting of the lower left and upper right corner
+     */
+    private Vector2d[] calculateCornersForVisualization() {
+        Vector2d[] corners = new Vector2d[2];
+
+        if(animalList.size() > 0) {
+            corners[0] = animalList.get(0).getPosition();
+            corners[1] = animalList.get(0).getPosition();
+
+            for(Animal animal : animalList) {
+                corners[0] = corners[0].lowerLeft(animal.getPosition());
+                corners[1] = corners[1].upperRight(animal.getPosition());
+            }
+        }
+
+        for(Grass grass : grassSwathsList) {
+            corners[0] = corners[0].lowerLeft(grass.getPosition());
+            corners[1] = corners[1].upperRight(grass.getPosition());
+        }
+
+        return corners;
+    }
+
+    /**
+     * Fills up the map randomly within the (0,0), (sqrt(n*10), sqrt(n*10) rectangle, given number of swaths n
+     *
      * @param numOfGrassSwaths
      *          Number of grass swaths to generate
      */
@@ -41,6 +71,7 @@ public class GrassField implements IWorldMap {
 
     /**
      * Generates valid random grass swath position for the grass generation
+     *
      * @param numOfGrassSwaths
      *          Number based on which the position is generated
      * @param maxPosition
@@ -53,7 +84,7 @@ public class GrassField implements IWorldMap {
 
         Vector2d generatedPos = new Vector2d(randomPosX, randomPosY);
 
-        while (isOccupiedByGrass(generatedPos)) {
+        while (isOccupied(generatedPos)) {
             randomPosX = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
             randomPosY = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
 
@@ -101,16 +132,12 @@ public class GrassField implements IWorldMap {
             }
         }
 
-        return Optional.empty();
-    }
-
-    private boolean isOccupiedByGrass(Vector2d position) {
         for (Grass grass : grassSwathsList) {
             if (grass.getPosition().equals(position)) {
-               return true;
+                return Optional.of(grass);
             }
         }
 
-        return false;
+        return Optional.empty();
     }
 }
