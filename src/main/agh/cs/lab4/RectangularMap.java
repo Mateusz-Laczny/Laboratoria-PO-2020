@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public class RectangularMap implements IWorldMap{
     // List of animals currently present on the map
-    // Używam listy ze względu na łatwość implementacji i dodawania nowych zwierząt na mapę
     private final List<Animal> animalList = new LinkedList<>();
     // Corners of the rectangle
     private final Vector2d upperRightCorner;
@@ -19,7 +18,7 @@ public class RectangularMap implements IWorldMap{
     private final MapVisualiser visualizer = new MapVisualiser(this);
 
     public RectangularMap(int width, int height) {
-        upperRightCorner = new Vector2d(width, height);
+        upperRightCorner = new Vector2d(width - 1, height - 1);
         lowerLeftCorner = Vector2d.zero();
     }
 

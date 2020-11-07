@@ -11,9 +11,9 @@ import java.util.List;
 public class World {
     public static void main(String[] args) {
         List<MoveDirection> directions = OptionsParser.parse(args);
-        IWorldMap map = new GrassField(10);
+        IWorldMap map = new RectangularMap(4, 5);
         map.place(new Animal(map));
-        map.place(new Animal(map,new Vector2d(3,4)));
+        map.place(new Animal(map, new Vector2d(2,4)));
         map.run(directions);
 
         System.out.println(map);

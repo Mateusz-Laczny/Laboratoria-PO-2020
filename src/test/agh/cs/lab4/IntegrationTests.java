@@ -35,10 +35,16 @@ class IntegrationTests {
                 MoveDirection.FORWARD, MoveDirection.LEFT, MoveDirection.FORWARD, MoveDirection.FORWARD,
                 MoveDirection.FORWARD, MoveDirection.BACKWARD, MoveDirection.BACKWARD);
 
-        List<Vector2d> correctPositions = List.of(new Vector2d(2,2), new Vector2d(3,2),
-                new Vector2d(4, 2), new Vector2d(4, 2), new Vector2d(4, 2),
-                new Vector2d(4, 3), new Vector2d(4, 4), new Vector2d(4, 4),
-                new Vector2d(4, 3), new Vector2d(4, 2));
+        List<Vector2d> correctPositions = List.of(new Vector2d(2,2),
+                new Vector2d(3,2),
+                new Vector2d(3, 2),
+                new Vector2d(3, 2),
+                new Vector2d(3, 2),
+                new Vector2d(3, 3),
+                new Vector2d(3, 3),
+                new Vector2d(3, 3),
+                new Vector2d(3, 2),
+                new Vector2d(3, 1));
 
         List<MapDirection> correctOrientation = List.of(MapDirection.EAST, MapDirection.EAST, MapDirection.EAST,
                 MapDirection.EAST, MapDirection.NORTH, MapDirection.NORTH, MapDirection.NORTH, MapDirection.NORTH,
@@ -85,10 +91,17 @@ class IntegrationTests {
                 MoveDirection.BACKWARD, MoveDirection.BACKWARD, MoveDirection.RIGHT, MoveDirection.LEFT,
                 MoveDirection.FORWARD);
 
-        List<Vector2d> correctPositions = List.of(new Vector2d(2,3), new Vector2d(2,4),
-                new Vector2d(2, 4), new Vector2d(2, 3), new Vector2d(2, 3),
-                new Vector2d(2, 3), new Vector2d(2, 2), new Vector2d(2, 1),
-                new Vector2d(2, 0), new Vector2d(2, 0), new Vector2d(2, 0),
+        List<Vector2d> correctPositions = List.of(new Vector2d(2,3),
+                new Vector2d(2,3),
+                new Vector2d(2, 3),
+                new Vector2d(2, 2),
+                new Vector2d(2, 2),
+                new Vector2d(2, 2),
+                new Vector2d(2, 1),
+                new Vector2d(2, 0),
+                new Vector2d(2, 0),
+                new Vector2d(2, 0),
+                new Vector2d(2, 0),
                 new Vector2d(2, 1));
 
         List<MapDirection> correctOrientation = List.of(MapDirection.NORTH, MapDirection.NORTH, MapDirection.NORTH,
@@ -122,7 +135,7 @@ class IntegrationTests {
         bo miejsce jest zajęte przez innego zwierzaka) i wywołujemy metodę run. Na koniec sprawdzamy działanie metody
         to_string w klasie Animal
          */
-        RectangularMap map = new RectangularMap(2, 3);
+        RectangularMap map = new RectangularMap(3, 3);
 
         Animal animal1 = new Animal(map, new Vector2d(1, 1));
         assertEquals(MapDirection.NORTH, animal1.getOrientation());
@@ -170,7 +183,7 @@ class IntegrationTests {
 
         // Animal 3 after run method call
         assertEquals(MapDirection.WEST, animal3.getOrientation());
-        assertEquals(new Vector2d(2, 3), animal3.getPosition());
+        assertEquals(new Vector2d(2, 2), animal3.getPosition());
 
         assertEquals(">", animal1.toString());
         assertEquals(">", animal2.toString());
@@ -186,7 +199,7 @@ class IntegrationTests {
         bo miejsce jest zajęte przez innego zwierzaka) i wywołujemy metodę run. Na koniec sprawdzamy działanie metody
         to_string w klasie Animal i próbujemy pobrać zwierzaki z pozycji (2, 2),
          */
-        RectangularMap map = new RectangularMap(3, 5);
+        RectangularMap map = new RectangularMap(4, 5);
 
         Animal animal1 = new Animal(map, new Vector2d(3, 4));
         assertEquals(MapDirection.NORTH, animal1.getOrientation());
@@ -226,7 +239,7 @@ class IntegrationTests {
 
         // Animal 1 after run method call
         assertEquals(MapDirection.WEST, animal1.getOrientation());
-        assertEquals(new Vector2d(2, 5), animal1.getPosition());
+        assertEquals(new Vector2d(2, 4), animal1.getPosition());
 
         // Animal 2 after run method call
         assertEquals(MapDirection.SOUTH, animal2.getOrientation());
@@ -242,7 +255,7 @@ class IntegrationTests {
         assertEquals("^", animal4.toString());
 
         // ObjectAt method tests
-        assertEquals(Optional.of(animal1), map.objectAt(new Vector2d(2, 5)));
+        assertEquals(Optional.of(animal1), map.objectAt(new Vector2d(2, 4)));
         assertEquals(Optional.of(animal2), map.objectAt(new Vector2d(1, 3)));
         assertEquals(Optional.of(animal3), map.objectAt(new Vector2d(2, 3)));
         assertEquals(Optional.empty(), map.objectAt(new Vector2d(1, 1)));
