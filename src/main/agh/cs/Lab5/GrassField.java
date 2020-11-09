@@ -1,24 +1,16 @@
 package agh.cs.Lab5;
 
-import agh.cs.lab2.MoveDirection;
 import agh.cs.lab2.Vector2d;
 import agh.cs.lab3.Animal;
-import agh.cs.lab4.IWorldMap;
-import agh.cs.lab4.MapVisualiser;
 
-import java.lang.reflect.Array;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.LinkedList;
 import java.util.List;
 import java.lang.Math;
 
 
-public class GrassField implements IWorldMap {
+public class GrassField extends AbstractWorldMap {
     private final List<Grass> grassSwathsList= new LinkedList<>();
-    private final List<Animal> animalList = new LinkedList<>();
-    // Visualizer for map drawing
-    private final MapVisualiser visualizer = new MapVisualiser(this);
 
     public GrassField(int numOfGrassSwaths) {
         generateGrass(numOfGrassSwaths);
@@ -29,12 +21,8 @@ public class GrassField implements IWorldMap {
         return visualizer.draw(calculateCornersForVisualization()[0], calculateCornersForVisualization()[1]);
     }
 
-    /**
-     * Calculates map corners for visualization. Animals have higher priority than grass swaths
-     *
-     * @return An array consisting of the lower left and upper right corner
-     */
-    private Vector2d[] calculateCornersForVisualization() {
+    @Override
+    protected Vector2d[] calculateCornersForVisualization() {
         Vector2d[] corners = new Vector2d[2];
 
         if(animalList.size() > 0) {
@@ -84,7 +72,7 @@ public class GrassField implements IWorldMap {
 
         Vector2d generatedPos = new Vector2d(randomPosX, randomPosY);
 
-        while (isOccupied(generatedPos)) {
+        while (hasGrass(generatedPos)) {
             randomPosX = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
             randomPosY = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
 
@@ -94,50 +82,20 @@ public class GrassField implements IWorldMap {
         return generatedPos;
     }
 
-    @Override
-    public boolean canMoveTo(Vector2d position) {
-        return !isOccupied(position);
-    }
-
-    @Override
-    public boolean place(Animal animal) {
-        if(canMoveTo(animal.getPosition())) {
-            animalList.add(animal);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public void run(List<MoveDirection> directions) {
-        int animalIndex = 0;
-
-        for(MoveDirection direction : directions) {
-            animalList.get(animalIndex).move(direction);
-            animalIndex = (animalIndex + 1) % animalList.size();
-        }
-    }
-
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        return !objectAt(position).equals(Optional.empty());
-    }
-
-    @Override
-    public Optional<Object> objectAt(Vector2d position) {
-        for (Animal animal : animalList) {
-            if (animal.getPosition().equals(position)) {
-                return Optional.of(animal);
-            }
-        }
-
+    /**
+     * Checks whether the given position on the map is occupied by a Grass object
+     *
+     * @param position
+     *          Position to check
+     * @return True if the position is occupied by grass.
+     */
+    private boolean hasGrass(Vector2d position) {
         for (Grass grass : grassSwathsList) {
             if (grass.getPosition().equals(position)) {
-                return Optional.of(grass);
+                return true;
             }
         }
 
-        return Optional.empty();
+        return false;
     }
 }

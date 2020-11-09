@@ -1,72 +1,39 @@
 package agh.cs.lab4;
 
-import agh.cs.lab2.MoveDirection;
+import agh.cs.Lab5.AbstractWorldMap;
 import agh.cs.lab2.Vector2d;
-import agh.cs.lab3.Animal;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
-public class RectangularMap implements IWorldMap{
-    // List of animals currently present on the map
-    private final List<Animal> animalList = new LinkedList<>();
-    // Corners of the rectangle
-    private final Vector2d upperRightCorner;
-    private final Vector2d lowerLeftCorner;
+public class RectangularMap extends AbstractWorldMap {
+    // Dimensions of the rectangle
+    private final int width;
+    private final  int height;
     // Visualizer for map drawing
     private final MapVisualiser visualizer = new MapVisualiser(this);
 
     public RectangularMap(int width, int height) {
-        upperRightCorner = new Vector2d(width - 1, height - 1);
-        lowerLeftCorner = Vector2d.zero();
+        this.width = width;
+        this.height = height;
     }
 
     @Override
-    public String toString() {
-        return visualizer.draw(lowerLeftCorner, upperRightCorner);
+    protected Vector2d[] calculateCornersForVisualization() {
+        return new Vector2d[]{Vector2d.zero(), new Vector2d(width - 1, height - 1)};
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        // Given position is not in the given rectangle
-        return lowerLeftCorner.follows(position) && upperRightCorner.precedes(position) &&
-        !isOccupied(position);
+        return super.canMoveTo(position) && isInsideMap(position);
     }
 
-    @Override
-    public boolean place(Animal animal) {
-        if(canMoveTo(animal.getPosition())) {
-            animalList.add(animal);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public void run(List<MoveDirection> directions) {
-        int animalIndex = 0;
-
-        for(MoveDirection direction : directions) {
-            animalList.get(animalIndex).move(direction);
-            animalIndex = (animalIndex + 1) % animalList.size();
-        }
-    }
-
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        return !objectAt(position).equals(Optional.empty());
-    }
-
-    @Override
-    public Optional<Object> objectAt(Vector2d position) {
-        for (Animal animal : animalList) {
-            if (animal.getPosition().equals(position)) {
-                return Optional.of(animal);
-            }
-        }
-
-        return Optional.empty();
+    /**
+     * Checks whether given position is inside the boundaries of the map
+     *
+     * @param position
+     *          A Vector2d object representing position to check
+     * @return True if position is inside the map
+     */
+    private boolean isInsideMap(Vector2d position) {
+        return Vector2d.zero().follows(position) &&
+                (new Vector2d(width - 1, height - 1)).precedes(position);
     }
 }

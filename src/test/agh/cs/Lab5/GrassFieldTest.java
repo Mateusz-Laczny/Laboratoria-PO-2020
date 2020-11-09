@@ -1,4 +1,4 @@
-package agh.cs.lab4;
+package agh.cs.Lab5;
 
 import agh.cs.lab2.MapDirection;
 import agh.cs.lab2.MoveDirection;
@@ -12,35 +12,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RectangularMapTest {
-
-    @Test
-    void testToString() {
-        RectangularMap map = new RectangularMap(4, 5);
-        map.place(new Animal(map));
-        map.place(new Animal(map, new Vector2d(2, 4)));
-
-        String correctRepresentation = " y\\x  0 1 2 3\n" +
-                                       "  5: ---------\n" +
-                                       "  4: | | |^| |\n" +
-                                       "  3: | | | | |\n" +
-                                       "  2: | | |^| |\n" +
-                                       "  1: | | | | |\n" +
-                                       "  0: | | | | |\n" +
-                                       " -1: ---------\n";
-
-        // Useful for comparing
-        System.out.println("Correct");
-        System.out.println(correctRepresentation);
-        System.out.println("Actual");
-        System.out.println(map);
-
-        assertEquals(correctRepresentation, map.toString());
-    }
-
+class GrassFieldTest {
     @Test
     void testCanMoveToCorrectPositions() {
-        RectangularMap map = new RectangularMap(3, 7);
+        GrassField map = new GrassField(10);
 
         List<Vector2d> listOfCorrectPositions = List.of(new Vector2d(1, 5),
                 new Vector2d(2, 6), new Vector2d(1, 1));
@@ -51,21 +26,8 @@ class RectangularMapTest {
     }
 
     @Test
-    void cantMoveToPositionsOutOfMap() {
-        RectangularMap map = new RectangularMap(2, 6);
-
-        List<Vector2d> listOfIncorrectPositions = List.of(new Vector2d(10, 10),
-                new Vector2d(2, 7), new Vector2d(-2, 3),
-                new Vector2d(1, 7), new Vector2d(0, -1));
-
-        for(Vector2d position : listOfIncorrectPositions) {
-            assertFalse(map.canMoveTo(position));
-        }
-    }
-
-    @Test
     void cantMoveToOccupiedPositions() {
-        RectangularMap map = new RectangularMap(3, 5);
+        GrassField map = new GrassField(1);
 
         List<Animal> listOfAnimals = List.of(new Animal(map), new Animal(map, new Vector2d(1, 4)));
         List<Vector2d> incorrectPositions = new LinkedList<>();
@@ -82,7 +44,8 @@ class RectangularMapTest {
 
     @Test
     void placesAnimalsOnCorrectPositions() {
-        RectangularMap map = new RectangularMap(1, 8);
+        GrassField map = new GrassField(3);
+
         List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 1)),
                 new Animal(map, new Vector2d(0, 3)),
                 new Animal(map, new Vector2d(0, 7)));
@@ -93,21 +56,9 @@ class RectangularMapTest {
     }
 
     @Test
-    void doesentPlaceAnimalsOnPositionsOutOfMap() {
-        RectangularMap map = new RectangularMap(4, 20);
-        List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 100)),
-                new Animal(map, new Vector2d(-1, 3)),
-                new Animal(map, new Vector2d(0, -10)));
-
-        for(Animal animal : listOfAnimals) {
-            assertFalse(map.place(animal));
-        }
-    }
-
-    @Test
     void doesentPlaceAnimalsOnOccupiedPositions() {
-        RectangularMap map = new RectangularMap(1, 8);
-        
+        GrassField map = new GrassField(1000);
+
         List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 1)),
                 new Animal(map, new Vector2d(0, 3)),
                 new Animal(map, new Vector2d(0, 7)));
@@ -120,20 +71,31 @@ class RectangularMapTest {
 
     @Test
     void testRun() {
-        RectangularMap map = new RectangularMap(4,4);
+        GrassField map = new GrassField(9);
 
         List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 1)),
                 new Animal(map, new Vector2d(0, 3)),
                 new Animal(map, new Vector2d(0, 2)), new Animal(map));
 
-        List<MoveDirection> directions = List.of(MoveDirection.FORWARD, MoveDirection.RIGHT, MoveDirection.FORWARD,
-                MoveDirection.BACKWARD, MoveDirection.RIGHT, MoveDirection.LEFT, MoveDirection.FORWARD,
-                MoveDirection.RIGHT, MoveDirection.BACKWARD, MoveDirection.LEFT, MoveDirection.LEFT,
-                MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD);
+        List<MoveDirection> directions = List.of(MoveDirection.FORWARD,
+                MoveDirection.RIGHT,
+                MoveDirection.FORWARD,
+                MoveDirection.BACKWARD,
+                MoveDirection.RIGHT,
+                MoveDirection.LEFT,
+                MoveDirection.FORWARD,
+                MoveDirection.RIGHT,
+                MoveDirection.BACKWARD,
+                MoveDirection.LEFT,
+                MoveDirection.LEFT,
+                MoveDirection.FORWARD,
+                MoveDirection.BACKWARD,
+                MoveDirection.FORWARD,
+                MoveDirection.FORWARD);
 
-        List<Vector2d> correctPositions = List.of(new Vector2d(1, 1),
-                new Vector2d(0, 3),
-                new Vector2d(0, 2),
+        List<Vector2d> correctPositions = List.of(new Vector2d(-2, 1),
+                new Vector2d(-1, 3),
+                new Vector2d(-1, 2),
                 new Vector2d(3, 1));
 
         List<MapDirection> correctOrientations = List.of(MapDirection.EAST,
@@ -158,7 +120,7 @@ class RectangularMapTest {
 
     @Test
     void isOccupiedReturnsTrueIfPositionIsOccupied() {
-        RectangularMap map = new RectangularMap(10, 10);
+        GrassField map = new GrassField(0);
 
         List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 1)),
                 new Animal(map, new Vector2d(0, 3)),
@@ -172,7 +134,7 @@ class RectangularMapTest {
 
     @Test
     void isOccupiedReturnsFalseIfPositionIsNotOccupied() {
-        RectangularMap map = new RectangularMap(10, 10);
+        GrassField map = new GrassField(90);
 
         List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 1)),
                 new Animal(map, new Vector2d(0, 3)),
@@ -194,7 +156,7 @@ class RectangularMapTest {
 
     @Test
     void objectAtReturnsCorrectObject() {
-        RectangularMap map = new RectangularMap(10, 10);
+        GrassField map = new GrassField(8);
 
         List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 1)),
                 new Animal(map, new Vector2d(0, 3)),
