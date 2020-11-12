@@ -17,11 +17,6 @@ public class GrassField extends AbstractWorldMap {
     }
 
     @Override
-    public String toString() {
-        return visualizer.draw(calculateCornersForVisualization()[0], calculateCornersForVisualization()[1]);
-    }
-
-    @Override
     protected Vector2d[] calculateCornersForVisualization() {
         Vector2d[] corners = new Vector2d[2];
 
@@ -53,33 +48,38 @@ public class GrassField extends AbstractWorldMap {
         int maxPos = (int) Math.sqrt(numOfGrassSwaths * 10);
 
         for(int i = 0; i < numOfGrassSwaths; i++) {
-            grassSwathsList.add(new Grass(generateRandomPosition(numOfGrassSwaths, maxPos)));
+            grassSwathsList.add(new Grass(generateRandomPosition(maxPos)));
         }
     }
 
     /**
      * Generates valid random grass swath position for the grass generation
      *
-     * @param numOfGrassSwaths
-     *          Number based on which the position is generated
      * @param maxPosition
      *          Max boundary on the coordinate value. The minimum is 0
      * @return Vector2d object representing a position on a 2D map
      */
-    private Vector2d generateRandomPosition(int numOfGrassSwaths, int maxPosition) {
-        int randomPosX = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
-        int randomPosY = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
-
-        Vector2d generatedPos = new Vector2d(randomPosX, randomPosY);
+    private Vector2d generateRandomPosition(int maxPosition) {
+        Vector2d generatedPos = getRandomVector2d(maxPosition);
 
         while (hasGrass(generatedPos)) {
-            randomPosX = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
-            randomPosY = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
-
-            generatedPos = new Vector2d(randomPosX, randomPosY);
+            generatedPos = getRandomVector2d(maxPosition);
         }
 
         return generatedPos;
+    }
+
+    /**
+     * Generates random 2D vector in a rectangle with corners (0,0), (maxPosition, maxPosition)
+     *
+     * @param maxPosition Maximal value of the vector coordinate
+     * @return Vector2d object with random coordinates in the given rectangle
+     */
+    private Vector2d getRandomVector2d(int maxPosition) {
+        int randomPosX = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
+        int randomPosY = ThreadLocalRandom.current().nextInt(0, maxPosition + 1);
+
+        return new Vector2d(randomPosX, randomPosY);
     }
 
     /**

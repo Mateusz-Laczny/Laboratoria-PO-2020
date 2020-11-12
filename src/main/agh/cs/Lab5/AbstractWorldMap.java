@@ -14,7 +14,7 @@ public abstract class AbstractWorldMap implements IWorldMap {
     // List of animals on the map
     protected final List<Animal> animalList = new LinkedList<>();
     // Visualizer for map drawing
-    protected final MapVisualiser visualizer = new MapVisualiser(this);
+    private final MapVisualiser visualizer = new MapVisualiser(this);
 
     @Override
     public String toString() {
