@@ -169,7 +169,8 @@ class IntegrationTests {
         assertTrue(map.place(animal1));
         assertTrue(map.place(animal2));
         assertTrue(map.place(animal3));
-        assertFalse(map.place(animal4));
+
+        assertThrows(IllegalArgumentException.class, () -> map.place(animal4));
 
         map.run(directionList);
 
@@ -233,7 +234,8 @@ class IntegrationTests {
         assertTrue(map.place(animal1));
         assertTrue(map.place(animal2));
         assertTrue(map.place(animal3));
-        assertFalse(map.place(animal4));
+
+        assertThrows(IllegalArgumentException.class, () -> map.place(animal4));
 
         map.run(directionList);
 

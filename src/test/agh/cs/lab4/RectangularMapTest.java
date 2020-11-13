@@ -100,7 +100,7 @@ class RectangularMapTest {
                 new Animal(map, new Vector2d(0, -10)));
 
         for(Animal animal : listOfAnimals) {
-            assertFalse(map.place(animal));
+            assertThrows(IllegalArgumentException.class, () -> map.place(animal));
         }
     }
 
@@ -114,7 +114,7 @@ class RectangularMapTest {
 
         for(Animal animal : listOfAnimals) {
             map.place(animal);
-            assertFalse(map.place(animal));
+            assertThrows(IllegalArgumentException.class, () -> map.place(animal));
         }
     }
 

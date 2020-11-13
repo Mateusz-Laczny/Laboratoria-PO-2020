@@ -65,7 +65,7 @@ class GrassFieldTest {
 
         for(Animal animal : listOfAnimals) {
             map.place(animal);
-            assertFalse(map.place(animal));
+            assertThrows(IllegalArgumentException.class, () -> map.place(animal));
         }
     }
 
