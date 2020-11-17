@@ -194,7 +194,7 @@ class IntegrationTests {
 
     @Test
     void scenarioFour() {
-                /*
+        /*
         Tworzymy mapę, 3 zwierzaki i tablicę komend. Za pomoca metody parse z klasy OptionsParser zamieniamy komendy
         z formy string na formę zdefiniowanego typu enum. Potem dodajemy zwierzaki do mapy (jeden z nich nie możemy
         bo miejsce jest zajęte przez innego zwierzaka) i wywołujemy metodę run. Na koniec sprawdzamy działanie metody
