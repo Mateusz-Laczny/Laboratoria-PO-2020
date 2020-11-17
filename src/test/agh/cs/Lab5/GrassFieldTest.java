@@ -77,21 +77,22 @@ class GrassFieldTest {
                 new Animal(map, new Vector2d(0, 3)),
                 new Animal(map, new Vector2d(0, 2)), new Animal(map));
 
-        List<MoveDirection> directions = List.of(MoveDirection.FORWARD,
-                MoveDirection.RIGHT,
-                MoveDirection.FORWARD,
-                MoveDirection.BACKWARD,
-                MoveDirection.RIGHT,
-                MoveDirection.LEFT,
-                MoveDirection.FORWARD,
-                MoveDirection.RIGHT,
-                MoveDirection.BACKWARD,
-                MoveDirection.LEFT,
-                MoveDirection.LEFT,
-                MoveDirection.FORWARD,
-                MoveDirection.BACKWARD,
-                MoveDirection.FORWARD,
-                MoveDirection.FORWARD);
+        List<MoveDirection> directions = List.of(
+                MoveDirection.FORWARD,  // 1
+                MoveDirection.RIGHT,    // 2
+                MoveDirection.FORWARD,  // 3
+                MoveDirection.BACKWARD, // 4
+                MoveDirection.RIGHT,    // 1
+                MoveDirection.LEFT,     // 2
+                MoveDirection.FORWARD,  // 3
+                MoveDirection.RIGHT,    // 4
+                MoveDirection.BACKWARD, // 1
+                MoveDirection.LEFT,     // 2
+                MoveDirection.LEFT,     // 3
+                MoveDirection.FORWARD,  // 4
+                MoveDirection.BACKWARD, // 1
+                MoveDirection.FORWARD,  // 2
+                MoveDirection.FORWARD); // 3
 
         List<Vector2d> correctPositions = List.of(new Vector2d(-2, 1),
                 new Vector2d(-1, 3),

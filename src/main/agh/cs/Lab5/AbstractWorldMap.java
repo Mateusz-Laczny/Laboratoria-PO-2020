@@ -6,13 +6,12 @@ import agh.cs.lab3.Animal;
 import agh.cs.lab4.IWorldMap;
 import agh.cs.lab4.MapVisualiser;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class AbstractWorldMap implements IWorldMap {
     // List of animals on the map
-    protected final List<Animal> animalList = new LinkedList<>();
+    // TODO ADD FINAL BACK
+    protected Map<Vector2d, Animal> animalMap = new LinkedHashMap<>();
     // Visualizer for map drawing
     private final MapVisualiser visualizer = new MapVisualiser(this);
 
@@ -36,7 +35,7 @@ public abstract class AbstractWorldMap implements IWorldMap {
     @Override
     public boolean place(Animal animal) throws IllegalArgumentException {
         if(canMoveTo(animal.getPosition())) {
-            animalList.add(animal);
+            animalMap.put(animal.getPosition(), animal);
             return true;
         } else {
             throw new IllegalArgumentException("Given position is incorrect");
@@ -48,8 +47,28 @@ public abstract class AbstractWorldMap implements IWorldMap {
         int animalIndex = 0;
 
         for(MoveDirection direction : directions) {
-            animalList.get(animalIndex).move(direction);
-            animalIndex = (animalIndex + 1) % animalList.size();
+            Vector2d[] keys = animalMap.keySet().toArray(new Vector2d[0]);
+
+            Animal currentAnimal = animalMap.get(keys[animalIndex]);
+
+            Vector2d oldPosition = currentAnimal.getPosition();
+            currentAnimal.move(direction);
+
+            // Na razie nie znamy lepszego rozwiązania :(
+            if(!currentAnimal.getPosition().equals(oldPosition)) {
+                Map<Vector2d, Animal> newAnimalMap = new LinkedHashMap<>();
+                for(Vector2d key : keys) {
+                    if(key.equals(oldPosition)) {
+                        newAnimalMap.put(currentAnimal.getPosition(), currentAnimal);
+                    } else {
+                        newAnimalMap.put(key, animalMap.get(key));
+                    }
+                }
+
+                animalMap = newAnimalMap;
+            }
+
+            animalIndex = (animalIndex + 1) % keys.length;
         }
     }
 
@@ -60,10 +79,8 @@ public abstract class AbstractWorldMap implements IWorldMap {
 
     @Override
     public Optional<Object> objectAt(Vector2d position) {
-        for (Animal animal : animalList) {
-            if (animal.getPosition().equals(position)) {
-                return Optional.of(animal);
-            }
+        if (animalMap.containsKey(position)) {
+            return Optional.of(animalMap.get(position));
         }
 
         return Optional.empty();

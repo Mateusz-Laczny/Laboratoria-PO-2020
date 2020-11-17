@@ -3,14 +3,14 @@ package agh.cs.Lab5;
 import agh.cs.lab2.Vector2d;
 import agh.cs.lab3.Animal;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.LinkedList;
-import java.util.List;
 import java.lang.Math;
 
 
 public class GrassField extends AbstractWorldMap {
-    private final List<Grass> grassSwathsList= new LinkedList<>();
+    private final Map<Vector2d, Grass> grassSwathsMap = new LinkedHashMap<>();
 
     public GrassField(int numOfGrassSwaths) {
         generateGrass(numOfGrassSwaths);
@@ -20,17 +20,20 @@ public class GrassField extends AbstractWorldMap {
     protected Vector2d[] calculateCornersForVisualization() {
         Vector2d[] corners = new Vector2d[2];
 
-        if(animalList.size() > 0) {
-            corners[0] = animalList.get(0).getPosition();
-            corners[1] = animalList.get(0).getPosition();
+        if(animalMap.size() > 0) {
+            Animal[] animals = animalMap.values().toArray(new Animal[0]);
 
-            for(Animal animal : animalList) {
+            corners[0] = animals[0].getPosition();
+            corners[1] = animals[0].getPosition();
+
+            for(Animal animal : animals) {
                 corners[0] = corners[0].lowerLeft(animal.getPosition());
                 corners[1] = corners[1].upperRight(animal.getPosition());
             }
         }
+        Grass[] grassSwathsArray = grassSwathsMap.values().toArray(new Grass[0]);
 
-        for(Grass grass : grassSwathsList) {
+        for(Grass grass : grassSwathsArray) {
             corners[0] = corners[0].lowerLeft(grass.getPosition());
             corners[1] = corners[1].upperRight(grass.getPosition());
         }
@@ -48,7 +51,8 @@ public class GrassField extends AbstractWorldMap {
         int maxPos = (int) Math.sqrt(numOfGrassSwaths * 10);
 
         for(int i = 0; i < numOfGrassSwaths; i++) {
-            grassSwathsList.add(new Grass(generateRandomPosition(maxPos)));
+            Vector2d randomPosition = generateRandomPosition(maxPos);
+            grassSwathsMap.put(randomPosition, new Grass(randomPosition));
         }
     }
 
@@ -90,12 +94,6 @@ public class GrassField extends AbstractWorldMap {
      * @return True if the position is occupied by grass.
      */
     private boolean hasGrass(Vector2d position) {
-        for (Grass grass : grassSwathsList) {
-            if (grass.getPosition().equals(position)) {
-                return true;
-            }
-        }
-
-        return false;
+        return grassSwathsMap.containsKey(position);
     }
 }

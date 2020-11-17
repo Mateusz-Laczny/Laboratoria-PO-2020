@@ -7,8 +7,6 @@ public class RectangularMap extends AbstractWorldMap {
     // Dimensions of the rectangle
     private final int width;
     private final  int height;
-    // Visualizer for map drawing
-    private final MapVisualiser visualizer = new MapVisualiser(this);
 
     public RectangularMap(int width, int height) {
         this.width = width;
