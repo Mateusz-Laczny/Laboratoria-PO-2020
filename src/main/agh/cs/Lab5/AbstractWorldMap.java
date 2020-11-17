@@ -6,7 +6,11 @@ import agh.cs.lab3.Animal;
 import agh.cs.lab4.IWorldMap;
 import agh.cs.lab4.MapVisualiser;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 
 public abstract class AbstractWorldMap implements IWorldMap {
     // List of animals on the map
