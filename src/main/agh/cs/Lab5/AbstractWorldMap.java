@@ -6,16 +6,12 @@ import agh.cs.lab3.Animal;
 import agh.cs.lab4.IWorldMap;
 import agh.cs.lab4.MapVisualiser;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 public abstract class AbstractWorldMap implements IWorldMap {
     // List of animals on the map
-    // TODO ADD FINAL BACK
-    protected Map<Vector2d, Animal> animalMap = new LinkedHashMap<>();
+    protected final Map<Vector2d, Animal> animalMap = new LinkedHashMap<>();
     // Visualizer for map drawing
     private final MapVisualiser visualizer = new MapVisualiser(this);
 
@@ -49,36 +45,32 @@ public abstract class AbstractWorldMap implements IWorldMap {
     @Override
     public void run(List<MoveDirection> directions) {
         int animalIndex = 0;
+        Animal[] animals = animalMap.values().toArray(new Animal[0]);
+        int numOfAnimals = animals.length;
 
         for(MoveDirection direction : directions) {
-            Vector2d[] keys = animalMap.keySet().toArray(new Vector2d[0]);
+            Animal currentAnimal = animals[animalIndex];
 
-            Animal currentAnimal = animalMap.get(keys[animalIndex]);
+            animalMap.remove(currentAnimal.getPosition());
 
-            Vector2d oldPosition = currentAnimal.getPosition();
             currentAnimal.move(direction);
 
-            // Na razie nie znamy lepszego rozwiązania :(
-            if(!currentAnimal.getPosition().equals(oldPosition)) {
-                Map<Vector2d, Animal> newAnimalMap = new LinkedHashMap<>();
-                for(Vector2d key : keys) {
-                    if(key.equals(oldPosition)) {
-                        newAnimalMap.put(currentAnimal.getPosition(), currentAnimal);
-                    } else {
-                        newAnimalMap.put(key, animalMap.get(key));
-                    }
-                }
+            animalMap.put(currentAnimal.getPosition(), currentAnimal);
 
-                animalMap = newAnimalMap;
-            }
+            animalIndex = (animalIndex + 1) % numOfAnimals;
+        }
 
-            animalIndex = (animalIndex + 1) % keys.length;
+        // We repopulate the map to keep the correct order of animals
+        animalMap.clear();
+
+        for(Animal animal : animals) {
+            animalMap.put(animal.getPosition(), animal);
         }
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        return !objectAt(position).equals(Optional.empty());
+        return objectAt(position).isPresent();
     }
 
     @Override

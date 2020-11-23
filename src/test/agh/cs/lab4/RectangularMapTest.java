@@ -149,6 +149,7 @@ class RectangularMapTest {
         int index = 0;
 
         for(Animal animal : listOfAnimals) {
+            System.out.println(animal.getPosition());
             assertEquals(correctPositions.get(index), animal.getPosition());
             assertEquals(correctOrientations.get(index), animal.getOrientation());
 
