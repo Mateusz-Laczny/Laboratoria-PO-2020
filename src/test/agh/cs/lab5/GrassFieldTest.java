@@ -126,9 +126,10 @@ class GrassFieldTest {
     void isOccupiedReturnsFalseIfPositionIsNotOccupied() {
         GrassField map = new GrassField(90);
 
-        List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 1)),
+        List.of(new Animal(map, new Vector2d(0, 1)),
                 new Animal(map, new Vector2d(0, 3)),
-                new Animal(map, new Vector2d(0, 2)), new Animal(map));
+                new Animal(map, new Vector2d(0, 2)),
+                new Animal(map));
 
         List<Vector2d> listOfPositions = List.of(new Vector2d(1, 1),
                 new Vector2d(0, 4),

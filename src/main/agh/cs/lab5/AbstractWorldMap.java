@@ -41,6 +41,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public void place(Animal animal) throws IllegalArgumentException {
         if(canMoveTo(animal.getPosition())) {
             animalMap.put(animal.getPosition(), animal);
+            animal.addObserver(this);
         } else {
             throw new IllegalArgumentException("Given position is incorrect. " +
                     "It's either occupied by an object that blocks movement, or is out of map bounds");

@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MapBoundary implements IPositionChangeObserver{
-    List<IMapElement> sortedElementsX;
-    List<IMapElement> sortedElementsY;
+    private final List<IMapElement> sortedElementsX;
+    private final List<IMapElement> sortedElementsY;
 
     public MapBoundary() {
         sortedElementsX = new LinkedList<>();
