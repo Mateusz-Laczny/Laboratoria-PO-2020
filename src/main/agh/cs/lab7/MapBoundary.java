@@ -45,6 +45,10 @@ public class MapBoundary implements IPositionChangeObserver{
     public void addElementToList(IMapElement element) {
         sortedElementsX.add(element);
         sortedElementsY.add(element);
+
+        // New element could be a new corner, so we have to sort both lists
+        sortedElementsX.sort(IMapElement::compareByXCoordinate);
+        sortedElementsY.sort(IMapElement::compareByYCoordinate);
     }
 
     /**
@@ -53,9 +57,22 @@ public class MapBoundary implements IPositionChangeObserver{
      * @return Vector2d array consisting of 2 Vector2d objects which are the corners of visualized rectangle
      */
     public Vector2d[] returnCornersForVisualization() {
-        return new Vector2d[]{new Vector2d(sortedElementsX.get(0).getPosition().x_coordinate,
-                sortedElementsY.get(0).getPosition().y_coordinate),
-                new Vector2d(sortedElementsX.get(sortedElementsX.size() - 1).getPosition().x_coordinate,
-                        sortedElementsY.get(sortedElementsY.size() - 1).getPosition().y_coordinate)};
+        int lowerLeftXCoordinate = 0;
+        int lowerLeftYCoordinate = 0;
+        int upperRightXCoordinate = 0;
+        int upperRightYCoordinate = 0;
+
+        if (sortedElementsX.size() > 0) {
+            lowerLeftXCoordinate = sortedElementsX.get(0).getPosition().x_coordinate;
+            upperRightXCoordinate = sortedElementsX.get(sortedElementsX.size() - 1).getPosition().x_coordinate;
+        }
+
+        if (sortedElementsY.size() > 0) {
+            lowerLeftYCoordinate = sortedElementsY.get(0).getPosition().y_coordinate;
+            upperRightYCoordinate = sortedElementsY.get(sortedElementsY.size() - 1).getPosition().y_coordinate;
+        }
+
+        return new Vector2d[]{new Vector2d(lowerLeftXCoordinate, lowerLeftYCoordinate),
+                new Vector2d(upperRightXCoordinate, upperRightYCoordinate)};
     }
 }

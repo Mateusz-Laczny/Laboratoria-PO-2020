@@ -17,7 +17,7 @@ public class Animal extends AbstractMapElement implements IPositionChangedPublis
     private final List<IPositionChangeObserver> observers;
 
     public Animal(IWorldMap map, Vector2d initialPosition) throws IllegalArgumentException{
-        super(initialPosition, true, 10);
+        super(initialPosition, true, 0);
         this.map = map;
         map.place(this);
         orientation = MapDirection.NORTH;

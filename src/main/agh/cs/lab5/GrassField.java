@@ -23,27 +23,7 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     protected Vector2d[] calculateCornersForVisualization() {
-        Vector2d[] corners = new Vector2d[2];
-
-        if(animalMap.size() > 0) {
-            Animal[] animals = animalMap.values().toArray(new Animal[0]);
-
-            corners[0] = animals[0].getPosition();
-            corners[1] = animals[0].getPosition();
-
-            for(Animal animal : animals) {
-                corners[0] = corners[0].lowerLeft(animal.getPosition());
-                corners[1] = corners[1].upperRight(animal.getPosition());
-            }
-        }
-        Grass[] grassSwathsArray = grassSwathsMap.values().toArray(new Grass[0]);
-
-        for(Grass grass : grassSwathsArray) {
-            corners[0] = corners[0].lowerLeft(grass.getPosition());
-            corners[1] = corners[1].upperRight(grass.getPosition());
-        }
-
-        return corners;
+        return mapBoundary.returnCornersForVisualization();
     }
 
     /**
@@ -57,7 +37,9 @@ public class GrassField extends AbstractWorldMap {
 
         for(int i = 0; i < numOfGrassSwaths; i++) {
             Vector2d randomPosition = generateRandomPosition(maxPos);
-            grassSwathsMap.put(randomPosition, new Grass(randomPosition));
+            Grass newGrass = new Grass(randomPosition);
+            grassSwathsMap.put(randomPosition, newGrass);
+            mapBoundary.addElementToList(newGrass);
         }
     }
 
@@ -104,15 +86,15 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     public Optional<IMapElement> objectAt(Vector2d position) {
-        if(super.objectAt(position).isEmpty()) {
+        Optional<IMapElement> superObjectAt = super.objectAt(position);
+
+        if(superObjectAt.isEmpty()) {
             if (grassSwathsMap.containsKey(position)) {
                 return Optional.of(grassSwathsMap.get(position));
-            } else {
-                return Optional.empty();
             }
         }
 
-        return super.objectAt(position);
+        return superObjectAt;
     }
 
     @Override

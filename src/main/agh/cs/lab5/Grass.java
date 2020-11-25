@@ -5,7 +5,7 @@ import agh.cs.lab2.Vector2d;
 
 public class Grass extends AbstractMapElement {
     public Grass(Vector2d position) {
-        super(position, false, 0);
+        super(position, false, 10);
     }
 
     @Override
