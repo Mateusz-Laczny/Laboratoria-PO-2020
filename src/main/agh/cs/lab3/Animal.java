@@ -1,19 +1,28 @@
 package agh.cs.lab3;
 
+import agh.cs.lab6.AbstractMapElement;
 import agh.cs.lab2.MoveDirection;
 import agh.cs.lab2.MapDirection;
 import agh.cs.lab2.Vector2d;
 import agh.cs.lab4.IWorldMap;
+import agh.cs.lab7.IPositionChangeObserver;
+import agh.cs.lab7.IPositionChangedPublisher;
 
-public class Animal {
+import java.util.LinkedList;
+import java.util.List;
+
+public class Animal extends AbstractMapElement implements IPositionChangedPublisher {
     private MapDirection orientation;
-    private Vector2d position;
     private final IWorldMap map;
+    private final List<IPositionChangeObserver> observers;
 
-    public Animal(IWorldMap map, Vector2d initialPosition) {
+    public Animal(IWorldMap map, Vector2d initialPosition) throws IllegalArgumentException{
+        super(initialPosition, true, 10);
         this.map = map;
+        map.place(this);
         orientation = MapDirection.NORTH;
-        position = initialPosition;
+        observers = new LinkedList<>();
+        observers.add((IPositionChangeObserver) map);
     }
 
     public Animal(IWorldMap map) {
@@ -22,10 +31,6 @@ public class Animal {
 
     public MapDirection getOrientation() {
         return orientation;
-    }
-
-    public Vector2d getPosition() {
-        return position;
     }
 
     @Override
@@ -50,7 +55,26 @@ public class Animal {
     private void changePosition(Vector2d changeVector) {
         Vector2d newPosition = position.add(changeVector);
         if(map.canMoveTo(newPosition)) {
+            Vector2d oldPosition = position;
             position = newPosition;
+
+            positionChanged(oldPosition);
+        }
+    }
+
+    @Override
+    public void addObserver(IPositionChangeObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(IPositionChangeObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void positionChanged(Vector2d oldPosition) {
+        for (IPositionChangeObserver observer : observers) {
+            observer.positionChanged(this, oldPosition, position);
         }
     }
 }

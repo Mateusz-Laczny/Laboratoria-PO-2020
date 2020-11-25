@@ -26,12 +26,13 @@ class AnimalTest {
 
     @Test
     void movesInGivenDirection() {
-        RectangularMap map = new RectangularMap(4, 4);
-        Animal testAnimal1 = new Animal(map);
+        RectangularMap map1 = new RectangularMap(4, 4);
+        Animal testAnimal1 = new Animal(map1);
         testAnimal1.move(MoveDirection.FORWARD);
         assertEquals(new Vector2d(2, 3), testAnimal1.getPosition());
 
-        Animal testAnimal2 = new Animal(map);
+        RectangularMap map2 = new RectangularMap(4, 4);
+        Animal testAnimal2 = new Animal(map2);
         testAnimal2.move(MoveDirection.BACKWARD);
         assertEquals(new Vector2d(2, 1), testAnimal2.getPosition());
     }

@@ -1,6 +1,6 @@
 package agh.cs.lab4;
 
-import agh.cs.Lab5.AbstractWorldMap;
+import agh.cs.lab5.AbstractWorldMap;
 import agh.cs.lab2.Vector2d;
 
 public class RectangularMap extends AbstractWorldMap {

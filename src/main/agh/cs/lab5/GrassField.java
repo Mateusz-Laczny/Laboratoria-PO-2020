@@ -1,18 +1,23 @@
-package agh.cs.Lab5;
+package agh.cs.lab5;
 
+import agh.cs.lab6.IMapElement;
 import agh.cs.lab2.Vector2d;
 import agh.cs.lab3.Animal;
+import agh.cs.lab7.MapBoundary;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.lang.Math;
 
 
 public class GrassField extends AbstractWorldMap {
     private final Map<Vector2d, Grass> grassSwathsMap = new LinkedHashMap<>();
+    private final MapBoundary mapBoundary = new MapBoundary();
 
     public GrassField(int numOfGrassSwaths) {
+
         generateGrass(numOfGrassSwaths);
     }
 
@@ -95,5 +100,24 @@ public class GrassField extends AbstractWorldMap {
      */
     private boolean hasGrass(Vector2d position) {
         return grassSwathsMap.containsKey(position);
+    }
+
+    @Override
+    public Optional<IMapElement> objectAt(Vector2d position) {
+        if(super.objectAt(position).isEmpty()) {
+            if (grassSwathsMap.containsKey(position)) {
+                return Optional.of(grassSwathsMap.get(position));
+            } else {
+                return Optional.empty();
+            }
+        }
+
+        return super.objectAt(position);
+    }
+
+    @Override
+    public void place(Animal animal) throws IllegalArgumentException {
+        super.place(animal);
+        mapBoundary.addElementToList(animal);
     }
 }

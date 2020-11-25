@@ -113,9 +113,8 @@ class IntegrationTests {
         int positionIndex = 0;
         int orientationIndex = 0;
 
-        assertEquals(correctList, directionList);
-
         for(MoveDirection direction : directionList) {
+            System.out.println(testAnimal.getPosition() + " " + testAnimal.getOrientation());
             testAnimal.move(direction);
             assertEquals(correctPositions.get(positionIndex), testAnimal.getPosition());
             assertEquals(correctOrientation.get(orientationIndex), testAnimal.getOrientation());
@@ -149,9 +148,7 @@ class IntegrationTests {
         assertEquals(MapDirection.NORTH, animal3.getOrientation());
         assertEquals(new Vector2d(2, 2), animal3.getPosition());
 
-        Animal animal4 = new Animal(map);
-        assertEquals(MapDirection.NORTH, animal4.getOrientation());
-        assertEquals(new Vector2d(2, 2), animal4.getPosition());
+        assertThrows(IllegalArgumentException.class, () -> new Animal(map));
 
         String[] testDirectionString = {"f", "forward", "f", "backward", "right", "l", "b", "right", "b", "right",
                 "left", "b"};
@@ -165,12 +162,6 @@ class IntegrationTests {
                 MoveDirection.BACKWARD);
 
         assertEquals(correctList, directionList);
-
-        assertTrue(map.place(animal1));
-        assertTrue(map.place(animal2));
-        assertTrue(map.place(animal3));
-
-        assertThrows(IllegalArgumentException.class, () -> map.place(animal4));
 
         map.run(directionList);
 
@@ -189,7 +180,6 @@ class IntegrationTests {
         assertEquals(">", animal1.toString());
         assertEquals(">", animal2.toString());
         assertEquals("<", animal3.toString());
-        assertEquals("^", animal4.toString());
     }
 
     @Test
@@ -214,9 +204,8 @@ class IntegrationTests {
         assertEquals(MapDirection.NORTH, animal3.getOrientation());
         assertEquals(new Vector2d(2, 2), animal3.getPosition());
 
-        Animal animal4 = new Animal(map, new Vector2d(3, 4));
-        assertEquals(MapDirection.NORTH, animal4.getOrientation());
-        assertEquals(new Vector2d(3, 4), animal4.getPosition());
+
+        assertThrows(IllegalArgumentException.class, () -> new Animal(map, new Vector2d(3, 4)));
 
         String[] testDirectionString = {"f", "r", "f", "backward", "right", "l", "f", "right", "b", "l",
                 "left", "f", "f", "f", "f"};
@@ -230,12 +219,6 @@ class IntegrationTests {
                 MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD);
 
         assertEquals(correctList, directionList);
-
-        assertTrue(map.place(animal1));
-        assertTrue(map.place(animal2));
-        assertTrue(map.place(animal3));
-
-        assertThrows(IllegalArgumentException.class, () -> map.place(animal4));
 
         map.run(directionList);
 
@@ -254,7 +237,6 @@ class IntegrationTests {
         assertEquals("<", animal1.toString());
         assertEquals("v", animal2.toString());
         assertEquals("<", animal3.toString());
-        assertEquals("^", animal4.toString());
 
         // ObjectAt method tests
         assertEquals(Optional.of(animal1), map.objectAt(new Vector2d(2, 4)));

@@ -1,15 +1,20 @@
-package agh.cs.Lab5;
+package agh.cs.lab5;
 
+import agh.cs.lab6.IMapElement;
 import agh.cs.lab2.MoveDirection;
 import agh.cs.lab2.Vector2d;
 import agh.cs.lab3.Animal;
 import agh.cs.lab4.IWorldMap;
 import agh.cs.lab4.MapVisualiser;
+import agh.cs.lab7.IPositionChangeObserver;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
-public abstract class AbstractWorldMap implements IWorldMap {
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     // List of animals on the map
     protected final Map<Vector2d, Animal> animalMap = new LinkedHashMap<>();
     // Visualizer for map drawing
@@ -33,12 +38,12 @@ public abstract class AbstractWorldMap implements IWorldMap {
     }
 
     @Override
-    public boolean place(Animal animal) throws IllegalArgumentException {
+    public void place(Animal animal) throws IllegalArgumentException {
         if(canMoveTo(animal.getPosition())) {
             animalMap.put(animal.getPosition(), animal);
-            return true;
         } else {
-            throw new IllegalArgumentException("Given position is incorrect");
+            throw new IllegalArgumentException("Given position is incorrect. " +
+                    "It's either occupied by an object that blocks movement, or is out of map bounds");
         }
     }
 
@@ -51,34 +56,43 @@ public abstract class AbstractWorldMap implements IWorldMap {
         for(MoveDirection direction : directions) {
             Animal currentAnimal = animals[animalIndex];
 
-            animalMap.remove(currentAnimal.getPosition());
-
             currentAnimal.move(direction);
 
-            animalMap.put(currentAnimal.getPosition(), currentAnimal);
-
             animalIndex = (animalIndex + 1) % numOfAnimals;
-        }
-
-        // We repopulate the map to keep the correct order of animals
-        animalMap.clear();
-
-        for(Animal animal : animals) {
-            animalMap.put(animal.getPosition(), animal);
         }
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        return objectAt(position).isPresent();
+        if(objectAt(position).isPresent()) {
+            return objectAt(position).get().isBlockingMovement();
+        }
+
+        return false;
     }
 
     @Override
-    public Optional<Object> objectAt(Vector2d position) {
+    public Optional<IMapElement> objectAt(Vector2d position) {
         if (animalMap.containsKey(position)) {
             return Optional.of(animalMap.get(position));
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public void positionChanged(IMapElement movedElement, Vector2d oldPosition, Vector2d newPosition) {
+        Animal[] animals = animalMap.values().toArray(new Animal[0]);
+        Animal currentAnimal = animalMap.get(oldPosition);
+
+        animalMap.clear();
+
+        for(Animal animal : animals) {
+            if(animal.equals(currentAnimal)) {
+                animalMap.put(newPosition, currentAnimal);
+            } else {
+                animalMap.put(animal.getPosition(), animal);
+            }
+        }
     }
 }

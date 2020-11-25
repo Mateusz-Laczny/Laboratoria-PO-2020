@@ -1,4 +1,4 @@
-package agh.cs.Lab5;
+package agh.cs.lab5;
 
 import agh.cs.lab2.MapDirection;
 import agh.cs.lab2.MoveDirection;
@@ -33,7 +33,6 @@ class GrassFieldTest {
         List<Vector2d> incorrectPositions = new LinkedList<>();
 
         for(Animal animal : listOfAnimals) {
-            map.place(animal);
             incorrectPositions.add(animal.getPosition());
         }
 
@@ -46,13 +45,9 @@ class GrassFieldTest {
     void placesAnimalsOnCorrectPositions() {
         GrassField map = new GrassField(3);
 
-        List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 1)),
+        assertDoesNotThrow(() -> List.of(new Animal(map, new Vector2d(0, 1)),
                 new Animal(map, new Vector2d(0, 3)),
-                new Animal(map, new Vector2d(0, 7)));
-
-        for(Animal animal : listOfAnimals) {
-            assertTrue(map.place(animal));
-        }
+                new Animal(map, new Vector2d(0, 7))));
     }
 
     @Test
@@ -64,8 +59,7 @@ class GrassFieldTest {
                 new Animal(map, new Vector2d(0, 7)));
 
         for(Animal animal : listOfAnimals) {
-            map.place(animal);
-            assertThrows(IllegalArgumentException.class, () -> map.place(animal));
+            assertThrows(IllegalArgumentException.class, () -> new Animal(map, animal.getPosition()));
         }
     }
 
@@ -104,10 +98,6 @@ class GrassFieldTest {
                 MapDirection.WEST,
                 MapDirection.EAST);
 
-        for(Animal animal : listOfAnimals) {
-            map.place(animal);
-        }
-
         map.run(directions);
         int index = 0;
 
@@ -128,7 +118,6 @@ class GrassFieldTest {
                 new Animal(map, new Vector2d(0, 2)), new Animal(map));
 
         for (Animal animal : listOfAnimals) {
-            map.place(animal);
             assertTrue(map.isOccupied(animal.getPosition()));
         }
     }
@@ -145,10 +134,6 @@ class GrassFieldTest {
                 new Vector2d(0, 4),
                 new Vector2d(3, 0),
                 new Vector2d(2, 3));
-
-        for (Animal animal : listOfAnimals) {
-            map.place(animal);
-        }
 
         for (Vector2d position : listOfPositions) {
             assertFalse(map.isOccupied(position));
@@ -169,7 +154,6 @@ class GrassFieldTest {
                 new Vector2d(2, 3));
 
         for (Animal animal : listOfAnimals) {
-            map.place(animal);
             assertEquals(Optional.of(animal), map.objectAt(animal.getPosition()));
         }
 

@@ -1,6 +1,7 @@
 package agh.cs.lab4;
 
 // TODO: importy mogą wymagać aktualizacji w zależności od struktury projektu!
+import agh.cs.lab6.IMapElement;
 import agh.cs.lab3.Animal;
 import agh.cs.lab2.MoveDirection;
 import agh.cs.lab2.Vector2d;
@@ -30,9 +31,11 @@ public interface IWorldMap {
      *
      * @param animal
      *            The animal to place on the map.
-     * @return True if the animal was placed. The animal cannot be placed if the map is already occupied.
+     *
+     * @throws IllegalArgumentException
+     *          If given position is invalid
      */
-    boolean place(Animal animal);
+    void place(Animal animal);
 
     /**
      * Move the animal on the map according to the provided move directions. Every
@@ -61,5 +64,5 @@ public interface IWorldMap {
      *            The position of the object.
      * @return Object or empty Optional if the position is not occupied.
      */
-    Optional<Object> objectAt(Vector2d position);
+    Optional<IMapElement> objectAt(Vector2d position);
 }

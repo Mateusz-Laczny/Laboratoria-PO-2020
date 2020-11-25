@@ -1,6 +1,7 @@
 package agh.cs.lab4;
 
 // TODO: importy mogą wymagać aktualizacji w zależności od struktury projektu!
+import agh.cs.lab6.IMapElement;
 import agh.cs.lab2.Vector2d;
 
 import java.util.Optional;
@@ -75,13 +76,14 @@ public class MapVisualiser {
     }
 
     private String drawObject(Vector2d currentPosition) {
-        String result;
+        String result = EMPTY_CELL;
         if (this.map.isOccupied(currentPosition)) {
-            Optional<Object> object = this.map.objectAt(currentPosition);
-            result = object.orElse(EMPTY_CELL).toString();
-        } else {
-            result = EMPTY_CELL;
+            Optional<IMapElement> object = this.map.objectAt(currentPosition);
+            if(object.isPresent()) {
+                result = object.get().toString();
+            }
         }
+
         return result;
     }
 }

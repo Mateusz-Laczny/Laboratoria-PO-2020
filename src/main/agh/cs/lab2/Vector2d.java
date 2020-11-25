@@ -61,6 +61,10 @@ public class Vector2d {
         return new Vector2d(-x_coordinate, -y_coordinate);
     }
 
+    public static int compareByYCoordinate(Vector2d vector1, Vector2d vector2) {
+        return Integer.compare(vector1.y_coordinate, vector2.y_coordinate);
+    }
+
     /**
      *   Returns the zero vector (0,0)
      * @return Vector2D object with coordinates (0, 0)

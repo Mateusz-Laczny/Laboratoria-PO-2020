@@ -17,8 +17,8 @@ class RectangularMapTest {
     @Test
     void testToString() {
         RectangularMap map = new RectangularMap(4, 5);
-        map.place(new Animal(map));
-        map.place(new Animal(map, new Vector2d(2, 4)));
+        Animal animal1 = new Animal(map);
+        Animal animal2 = new Animal(map, new Vector2d(2, 4));
 
         String correctRepresentation = " y\\x  0 1 2 3\n" +
                                        "  5: ---------\n" +
@@ -71,7 +71,6 @@ class RectangularMapTest {
         List<Vector2d> incorrectPositions = new LinkedList<>();
 
         for(Animal animal : listOfAnimals) {
-            map.place(animal);
             incorrectPositions.add(animal.getPosition());
         }
 
@@ -83,25 +82,19 @@ class RectangularMapTest {
     @Test
     void placesAnimalsOnCorrectPositions() {
         RectangularMap map = new RectangularMap(1, 8);
-        List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 1)),
-                new Animal(map, new Vector2d(0, 3)),
-                new Animal(map, new Vector2d(0, 7)));
 
-        for(Animal animal : listOfAnimals) {
-            assertTrue(map.place(animal));
-        }
+        assertDoesNotThrow(() -> List.of(new Animal(map, new Vector2d(0, 1)),
+                new Animal(map, new Vector2d(0, 3)),
+                new Animal(map, new Vector2d(0, 7))));
     }
 
     @Test
     void doesentPlaceAnimalsOnPositionsOutOfMap() {
         RectangularMap map = new RectangularMap(4, 20);
-        List<Animal> listOfAnimals = List.of(new Animal(map, new Vector2d(0, 100)),
-                new Animal(map, new Vector2d(-1, 3)),
-                new Animal(map, new Vector2d(0, -10)));
 
-        for(Animal animal : listOfAnimals) {
-            assertThrows(IllegalArgumentException.class, () -> map.place(animal));
-        }
+        assertThrows(IllegalArgumentException.class, () -> List.of(new Animal(map, new Vector2d(0, 100)),
+                new Animal(map, new Vector2d(-1, 3)),
+                new Animal(map, new Vector2d(0, -10))));
     }
 
     @Test
@@ -113,8 +106,7 @@ class RectangularMapTest {
                 new Animal(map, new Vector2d(0, 7)));
 
         for(Animal animal : listOfAnimals) {
-            map.place(animal);
-            assertThrows(IllegalArgumentException.class, () -> map.place(animal));
+            assertThrows(IllegalArgumentException.class, () -> new Animal(map, animal.getPosition()));
         }
     }
 
@@ -141,10 +133,6 @@ class RectangularMapTest {
                 MapDirection.WEST,
                 MapDirection.EAST);
 
-        for(Animal animal : listOfAnimals) {
-            map.place(animal);
-        }
-
         map.run(directions);
         int index = 0;
 
@@ -166,7 +154,6 @@ class RectangularMapTest {
                 new Animal(map, new Vector2d(0, 2)), new Animal(map));
 
         for (Animal animal : listOfAnimals) {
-            map.place(animal);
             assertTrue(map.isOccupied(animal.getPosition()));
         }
     }
@@ -183,10 +170,6 @@ class RectangularMapTest {
                 new Vector2d(0, 4),
                 new Vector2d(3, 0),
                 new Vector2d(2, 3));
-
-        for (Animal animal : listOfAnimals) {
-            map.place(animal);
-        }
 
         for (Vector2d position : listOfPositions) {
             assertFalse(map.isOccupied(position));
@@ -207,7 +190,6 @@ class RectangularMapTest {
                 new Vector2d(2, 3));
 
         for (Animal animal : listOfAnimals) {
-            map.place(animal);
             assertEquals(Optional.of(animal), map.objectAt(animal.getPosition()));
         }
 
